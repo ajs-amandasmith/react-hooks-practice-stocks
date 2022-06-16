@@ -6,12 +6,46 @@ import SearchBar from "./SearchBar";
 function MainContainer() {
   const [stockData, setStockData] = useState([]);
   const [myStocks, setMyStocks] = useState([]);
+  const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3001/stocks')
       .then(r => r.json())
       .then(stocks => setStockData(stocks))
   }, [])
+
+  useEffect(() => {
+    if (sortBy === 'Alphabetically') {
+      const sortedStocks = sortByName();
+      setStockData(sortedStocks)
+    } else {
+      const sortedStocks = sortByPrice();
+      setStockData(sortedStocks)
+    }
+  }, [sortBy])
+
+  function sortStocks(e) {
+    setSortBy(e.target.value)
+  }
+
+  const sortByName = () => {
+    return [...stockData].sort(function(a, b) {
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+    })
+  }
+
+  const sortByPrice = () => {
+    return [...stockData].sort(function(a, b) {
+      return a.price - b.price;
+    })
+  }
 
   const buyStock = (stock) => {
     if (!myStocks.includes(stock)) {
@@ -31,7 +65,7 @@ function MainContainer() {
 
   return (
     <div>
-      <SearchBar />
+      <SearchBar sortStocks={sortStocks} sortBy={sortBy} />
       <div className="row">
         <div className="col-8">
           <StockContainer stockData={stockData} handleClick={buyStock} />
