@@ -1,9 +1,9 @@
 import React from "react";
 import Stock from "./Stock";
 
-function StockContainer({ stockData }) {
+function StockContainer({ stockData, handleClick }) {
   const displayStocks = stockData.map(stock => (
-    <Stock key={stock.id} name={stock.name} price={stock.price} ticker={stock.ticker} />
+    <Stock key={stock.id} stock={stock} name={stock.name} price={stock.price} ticker={stock.ticker} handleClick={handleClick} />
   ))
   return (
     <div>

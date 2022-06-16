@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 
 function MainContainer() {
   const [stockData, setStockData] = useState([]);
+  const [myStocks, setMyStocks] = useState([]);
 
   useEffect(() => {
     fetch('http://localhost:3001/stocks')
@@ -12,15 +13,31 @@ function MainContainer() {
       .then(stocks => setStockData(stocks))
   }, [])
 
+  const buyStock = (stock) => {
+    if (!myStocks.includes(stock)) {
+      const updatedMyStocks = [...myStocks, stock];
+      setMyStocks(updatedMyStocks)
+    } else {
+      alert('You already have this stock!')
+    }
+  }
+
+  const sellStock = (soldStock => {
+    const updatedStocks = myStocks.filter(stock => {
+      return stock !== soldStock;
+    })
+    setMyStocks(updatedStocks);
+  })
+
   return (
     <div>
       <SearchBar />
       <div className="row">
         <div className="col-8">
-          <StockContainer stockData={stockData} />
+          <StockContainer stockData={stockData} handleClick={buyStock} />
         </div>
         <div className="col-4">
-          <PortfolioContainer />
+          <PortfolioContainer myStocks={myStocks} handleClick={sellStock} />
         </div>
       </div>
     </div>
