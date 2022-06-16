@@ -7,6 +7,7 @@ function MainContainer() {
   const [stockData, setStockData] = useState([]);
   const [myStocks, setMyStocks] = useState([]);
   const [sortBy, setSortBy] = useState('');
+  const [filteredType, setFilteredType] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3001/stocks')
@@ -23,6 +24,10 @@ function MainContainer() {
       setStockData(sortedStocks)
     }
   }, [sortBy])
+
+  const filterType = (e) => {
+    setFilteredType(e.target.value)
+  }
 
   function sortStocks(e) {
     setSortBy(e.target.value)
@@ -65,10 +70,10 @@ function MainContainer() {
 
   return (
     <div>
-      <SearchBar sortStocks={sortStocks} sortBy={sortBy} />
+      <SearchBar sortStocks={sortStocks} sortBy={sortBy} filterType={filterType} />
       <div className="row">
         <div className="col-8">
-          <StockContainer stockData={stockData} handleClick={buyStock} />
+          <StockContainer stockData={stockData} handleClick={buyStock} filteredType={filteredType} />
         </div>
         <div className="col-4">
           <PortfolioContainer myStocks={myStocks} handleClick={sellStock} />

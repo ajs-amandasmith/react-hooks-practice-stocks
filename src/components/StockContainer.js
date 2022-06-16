@@ -1,8 +1,11 @@
 import React from "react";
 import Stock from "./Stock";
 
-function StockContainer({ stockData, handleClick }) {
-  const displayStocks = stockData.map(stock => (
+function StockContainer({ stockData, handleClick, filteredType }) {
+  const displayStocks = stockData.filter(stock => {
+    if (filteredType === '') return true;
+    return stock.type === filteredType;
+  }).map(stock => (
     <Stock key={stock.id} stock={stock} name={stock.name} price={stock.price} ticker={stock.ticker} handleClick={handleClick} />
   ))
   return (
